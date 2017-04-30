@@ -12,7 +12,7 @@ CONDITION = { from: "2017-04-01", to: "2017-04-30" }
 CONDITION_STEP = 10
 OUTPUT_FILENAME_POSTS = "post_summary"
 OUTPUT_FILENAME_TAGS = "tag_summary"
-FILE_SUFFIX = CONDITION.map { |_k, v| v.slice(1..-1) }.join("_")
+FILE_SUFFIX = CONDITION.map { |_k, v| v }.join("_")
 PARSE_FIELDS = %w(uuid title created_at stock_count comment_count)
 
 @stored_posts = {}
