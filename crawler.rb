@@ -100,4 +100,4 @@ posts.each do |post|
   end
 end
 
-output(OUTPUT_FILENAME_TAGS, tags)
+output(OUTPUT_FILENAME_TAGS, tags.map { |k, v| v.update(name: k) })
