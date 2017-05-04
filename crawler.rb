@@ -8,7 +8,7 @@ require "date"
 WDAYS = %w(Sun Mon Tue Wed Thu Fri Sat)
 ENDPOINT = "https://qiita.com/api/v1"
 PER_PAGE = 100
-CONDITION = { from: "2017-04-01", to: "2017-04-30" }
+CONDITION = { from: "2017-03-01", to: "2017-04-30" }
 CONDITION_STEP = 10
 OUTPUT_FILENAME_POSTS = "post_summary"
 OUTPUT_FILENAME_TAGS = "tag_summary"
@@ -60,7 +60,7 @@ def summarize(posts)
 end
 
 def output(file_name, contents)
-  File.open("#{file_name}_#{FILE_SUFFIX}.json", "w") do |f|
+  File.open("./data/#{file_name}_#{FILE_SUFFIX}.json", "w") do |f|
     f.write(contents.to_json)
   end
 end
