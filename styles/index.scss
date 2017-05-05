@@ -1,2 +1,40 @@
 @import 'main';
-@import 'common/button'
+@import "../node_modules/material-design-lite/material.min.css";
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import 'common/button';
+
+$primary-color-dark:   #0288D1;
+$primary-color:        #03A9F4;
+$primary-color-light:  #B3E5FC;
+$primary-color-text:   #FFFFFF;
+$accent-color:         #FF9800;
+$primary-text-color:   #212121;
+$secondary-text-color: #757575;
+$divider-color:        #BDBDBD;
+
+@mixin scroll-button($color, $right) {
+  position: absolute;
+  right: $right;
+  bottom: -26px;
+  z-index: 3;
+  color: #FFFFFF !important;
+  background-color: $color !important;
+}
+
+.q-header {
+  background-color: $primary-color-dark;
+}
+
+.q-page-content {
+  position: relative;
+  min-height: calc(100vh - 150px);
+  padding: 50px;
+}
+
+.q-next-button {
+  @include scroll-button($primary-color, 20%);
+}
+
+.q-prev-button {
+  @include scroll-button($accent-color, 15%);
+}
