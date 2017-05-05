@@ -1,6 +1,8 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
+import '../node_modules/material-design-lite/material.min.js';
+import '../styles/index.scss';
 import App from './app.jsx';
 
 render( <AppContainer><App/></AppContainer>, document.querySelector("#app"));

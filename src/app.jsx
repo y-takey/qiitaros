@@ -1,6 +1,4 @@
 import React from 'react';
-import '../node_modules/material-design-lite/material.min.js';
-import '../styles/index.scss';
 import Header from './Header';
 import Footer from './Footer';
 import DatePage from './DatePage';
