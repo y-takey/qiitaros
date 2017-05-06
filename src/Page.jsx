@@ -31,6 +31,7 @@ export default class Page extends React.Component {
       <a name={this.props.name}></a>
       <div className="mdl-typography--text-center q-page-content" style={this.props.extStyle}>
         <div className="mdl-typography--display-1-color-contrast">{this.props.title}</div>
+        <br />
         {this.props.children}
         {this.nextBtn()}
         {this.prevBtn()}
