@@ -38,3 +38,7 @@ $divider-color:        #BDBDBD;
 .q-prev-button {
   @include scroll-button($accent-color, 15%);
 }
+
+.q-text {
+  color: $secondary-text-color;
+}

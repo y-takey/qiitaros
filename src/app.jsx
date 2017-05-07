@@ -8,6 +8,9 @@ import CharPage from './CharPage';
 import OtherPage from './OtherPage';
 
 const data = require('../data/post_summary_2017-03-01_2017-04-30.json');
+const beginDate = "2017-03-01";
+const endDate = "2017-04-30";
+const basicProps = { data, beginDate, endDate }
 const menu = { date: "日時", user: "ユーザ", tag: "タグ", char: "文字数", other: "その他" }
 const oddContentStyle = {
   backgroundColor: "#ffffff"
@@ -21,11 +24,11 @@ export default class App extends React.Component {
         <main className="mdl-layout__content">
           <div className="page-content">
             <a name="top"></a>
-            <DatePage data={data} name="date" next="user" extStyle={oddContentStyle}/>
-            <UserPage data={data} name="user" next="tag" prev="date"/>
-            <TagPage data={data} name="tag" next="char" prev="user" extStyle={oddContentStyle}/>
-            <CharPage data={data} name="char" next="other" prev="tag"/>
-            <OtherPage data={data} name="other"  prev="char" extStyle={oddContentStyle}/>
+            <DatePage {...basicProps} name="date" next="user" extStyle={oddContentStyle}/>
+            <UserPage {...basicProps} name="user" next="tag" prev="date"/>
+            <TagPage {...basicProps} name="tag" next="char" prev="user" extStyle={oddContentStyle}/>
+            <CharPage {...basicProps} name="char" next="other" prev="tag"/>
+            <OtherPage {...basicProps} name="other"  prev="char" extStyle={oddContentStyle}/>
           </div>
 
           <Footer />
