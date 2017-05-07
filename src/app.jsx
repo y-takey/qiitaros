@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import TopPage from './TopPage';
 import DatePage from './DatePage';
 import UserPage from './UserPage';
 import TagPage from './TagPage';
@@ -24,11 +25,12 @@ export default class App extends React.Component {
         <main className="mdl-layout__content">
           <div className="page-content">
             <a name="top"></a>
-            <DatePage {...basicProps} name="date" next="user" extStyle={oddContentStyle}/>
-            <UserPage {...basicProps} name="user" next="tag" prev="date"/>
-            <TagPage {...basicProps} name="tag" next="char" prev="user" extStyle={oddContentStyle}/>
-            <CharPage {...basicProps} name="char" next="other" prev="tag"/>
-            <OtherPage {...basicProps} name="other"  prev="char" extStyle={oddContentStyle}/>
+            <TopPage {...basicProps} name="top" next="date" extStyle={oddContentStyle}/>
+            <DatePage {...basicProps} name="date" next="user" prev="top"/>
+            <UserPage {...basicProps} name="user" next="tag" prev="date" extStyle={oddContentStyle}/>
+            <TagPage {...basicProps} name="tag" next="char" prev="user"/>
+            <CharPage {...basicProps} name="char" next="other" prev="tag" extStyle={oddContentStyle}/>
+            <OtherPage {...basicProps} name="other"  prev="char"/>
           </div>
 
           <Footer />
