@@ -3,9 +3,6 @@ import React from 'react';
 import Page from './Page';
 import LineChart from './LineChart';
 
-const verticalAlign = {
-  verticalAlign: "middle"
-}
 export default class DatePage extends React.Component {
   dateSummary(sorfField, keyResolver) {
     return _.reduce(_.sortBy(this.props.data, sorfField), (result, rec)=> {
