@@ -9,6 +9,7 @@ import CharPage from './CharPage';
 import OtherPage from './OtherPage';
 
 const data = require('../data/post_summary_2017-03-01_2017-04-30.json');
+const tagData = require('../data/tag_summary_2017-03-01_2017-04-30.json');
 const beginDate = "2017-03-01";
 const endDate = "2017-04-30";
 const basicProps = { data, beginDate, endDate }
@@ -28,7 +29,7 @@ export default class App extends React.Component {
             <TopPage {...basicProps} name="top" next="date" extStyle={oddContentStyle}/>
             <DatePage {...basicProps} name="date" next="user" prev="top"/>
             <UserPage {...basicProps} name="user" next="tag" prev="date" extStyle={oddContentStyle}/>
-            <TagPage {...basicProps} name="tag" next="char" prev="user"/>
+            <TagPage {...basicProps} tagData={tagData} name="tag" next="char" prev="user"/>
             <CharPage {...basicProps} name="char" next="other" prev="tag" extStyle={oddContentStyle}/>
             <OtherPage {...basicProps} name="other"  prev="char"/>
           </div>
