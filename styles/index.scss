@@ -42,3 +42,8 @@ $divider-color:        #BDBDBD;
 .q-text {
   color: $secondary-text-color;
 }
+
+.q-card__actions {
+  background-color: $primary-color;
+  color: $primary-color-text;
+}

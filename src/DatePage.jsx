@@ -1,65 +1,89 @@
 import _ from 'lodash';
 import React from 'react';
-import HeatCalendar from 'react-heat-calendar';
 import Page from './Page';
+import LineChart from './LineChart';
 
 const verticalAlign = {
   verticalAlign: "middle"
 }
 export default class DatePage extends React.Component {
-  userCount() {
-    return _.uniq(_.map(this.props.data, "user")).length
+  dateSummary(sorfField, keyResolver) {
+    return _.reduce(_.sortBy(this.props.data, sorfField), (result, rec)=> {
+      let key = keyResolver(rec);
+      let entry = result[key] || (result[key] = { post: 0, stock: 0 });
+      entry.post += 1;
+      entry.stock += rec["stock_count"];
+      return result;
+    }, {})
+  }
+
+  chartData(sorfField, keyResolver) {
+    const data = this.dateSummary(sorfField, keyResolver);
+    return {
+      labels: _.keys(data),
+      datasets: [
+        {
+          label: "投稿数",
+          fill: false,
+          yAxisID: "y-axis-0",
+          borderColor: "#03A9F4",
+          data: _.map(_.values(data), "post")
+        },
+        {
+          label: "平均ストック数",
+          fill: false,
+          yAxisID: "y-axis-1",
+          borderColor: "#FF9800",
+          data: _.map(_.values(data), (rec)=> _.round(rec.stock / rec.post, 1))
+        }
+      ]
+    }
   }
 
   render() {
-    const user = this.userCount();
-    const post = this.props.data.length;
-    const stock = _.sumBy(this.props.data, "stock_count");
-    const postAvg = _.round((post / user), 2)
-    const stockAvg = _.round((stock / post), 2)
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        yAxes: [
+          { "id": "y-axis-0", position: "left" },
+          { "id": "y-axis-1", position: "right" }
+        ]
+      }
+    }
 
     return (
       <Page title="日時から見るQiita" {...this.props}>
-        <HeatCalendar
-          beginDate={new Date('2017-01-01')}
-          endDate={new Date('2017-12-31')}
-          data={this.props.data}
-          dateField="created_at"
-        />
         <div className="mdl-grid">
-          <div className="mdl-cell mdl-cell--5-col mdl-cell--middle mdl-typography--text-right mdl-typography--subhead q-text">
-            <span style={verticalAlign}>集計期間&nbsp;</span>
-            <i  style={verticalAlign} className="material-icons">date_range</i>
+          <div className="mdl-cell mdl-cell--12-col mdl-typography--text-left mdl-cell--middle mdl-typography--subhead q-text">
+            <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%" }}>
+              <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
+                <LineChart data={this.chartData("created_at", rec => `${rec["year"]}-${rec["month"]}-${rec["day"]} (${rec["wday"]})`)} options={chartOptions} />
+              </div>
+              <div className="mdl-card__actions mdl-card--border q-card__actions">
+                日別投　投稿数・平均ストック数
+              </div>
+            </div>
           </div>
-          <div className="mdl-cell mdl-cell--7-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
-            {this.props.beginDate} ~ {this.props.endDate}
+          <div className="mdl-cell mdl-cell--6-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
+            <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%"}}>
+              <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
+                <LineChart data={this.chartData("hour", rec => rec["hour"])} options={chartOptions} />
+              </div>
+              <div className="mdl-card__actions mdl-card--border q-card__actions">
+                時間帯別　投稿数・平均ストック数
+              </div>
+            </div>
           </div>
-          <div className="mdl-cell mdl-cell--5-col mdl-cell--middle mdl-typography--text-right mdl-typography--subhead q-text">
-            <span style={verticalAlign}>投稿ユーザ数&nbsp;</span>
-            <i style={verticalAlign} className="material-icons">people</i>
-          </div>
-          <div className="mdl-cell mdl-cell--7-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
-            {user.toLocaleString("japan")}
-          </div>
-          <div className="mdl-cell mdl-cell--5-col mdl-cell--middle mdl-typography--text-right mdl-typography--subhead q-text">
-            <span style={verticalAlign}>投稿数&nbsp;</span>
-            <i style={verticalAlign} className="material-icons">description</i>
-          </div>
-          <div className="mdl-cell mdl-cell--7-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
-            {post.toLocaleString("japan")}
-            <span className="mdl-typography--subhead">
-              &nbsp;(ユーザ平均 { postAvg.toLocaleString("japan") })
-            </span>
-          </div>
-          <div className="mdl-cell mdl-cell--5-col mdl-cell--middle mdl-typography--text-right mdl-typography--subhead q-text">
-            <span style={verticalAlign}>ストック数&nbsp;</span>
-            <i style={verticalAlign} className="material-icons">folder_special</i>
-          </div>
-          <div className="mdl-cell mdl-cell--7-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
-            {stock.toLocaleString("japan")}
-            <span className="mdl-typography--subhead">
-              &nbsp;(投稿平均 { stockAvg.toLocaleString("japan") })
-            </span>
+          <div className="mdl-cell mdl-cell--6-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
+            <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%"}}>
+              <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
+                <LineChart data={this.chartData("created_at", rec => rec["wday"])} options={chartOptions} />
+              </div>
+              <div className="mdl-card__actions mdl-card--border q-card__actions">
+                曜日別　投稿数・平均ストック数
+              </div>
+            </div>
           </div>
         </div>
       </Page>
