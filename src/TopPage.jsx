@@ -2,21 +2,44 @@ import _ from 'lodash';
 import React from 'react';
 import HeatCalendar from 'react-heat-calendar';
 import Page from './Page';
+import Loader from './Loader';
 
 const verticalAlign = {
   verticalAlign: "middle"
 }
+
 export default class TopPage extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = { loading: true };
+  }
+
+  componentDidMount() {
+    const user = this.userCount();
+    const post = this.props.data.length;
+    const stock = _.sumBy(this.props.data, "stock_count");
+
+    this.setState({
+      loading: false,
+      data: {
+        user: user,
+        post: post,
+        postAvg: _.round((post / user), 2),
+        stock: stock,
+        stockAvg: _.round((stock / post), 2)
+      }
+    });
+  }
+
   userCount() {
     return _.uniq(_.map(this.props.data, "user")).length
   }
 
   render() {
-    const user = this.userCount();
-    const post = this.props.data.length;
-    const stock = _.sumBy(this.props.data, "stock_count");
-    const postAvg = _.round((post / user), 2)
-    const stockAvg = _.round((stock / post), 2)
+    if (this.state.loading) return <Loader title="" />
+
+    const { user, post, postAvg, stock, stockAvg } = this.state.data;
 
     return (
       <Page title="" {...this.props}>

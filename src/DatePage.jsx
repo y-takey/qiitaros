@@ -1,9 +1,39 @@
 import _ from 'lodash';
 import React from 'react';
 import Page from './Page';
+import Loader from './Loader';
 import LineChart from './LineChart';
 
+const title = "日時から見るQiita";
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    yAxes: [
+      { "id": "y-axis-0", position: "left" },
+      { "id": "y-axis-1", position: "right" }
+    ]
+  }
+}
+
 export default class DatePage extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = { loading: true };
+  }
+
+  componentDidMount() {
+    this.setState({
+      loading: false,
+      data: {
+        date: this.chartData("created_at", rec => `${rec["year"]}-${rec["month"]}-${rec["day"]} (${rec["wday"]})`),
+        hour: this.chartData("hour", rec => rec["hour"]),
+        wday: this.chartData("created_at", rec => rec["wday"])
+      }
+    });
+  }
+
   dateSummary(sorfField, keyResolver) {
     return _.reduce(_.sortBy(this.props.data, sorfField), (result, rec)=> {
       let key = keyResolver(rec);
@@ -38,24 +68,17 @@ export default class DatePage extends React.Component {
   }
 
   render() {
-    const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        yAxes: [
-          { "id": "y-axis-0", position: "left" },
-          { "id": "y-axis-1", position: "right" }
-        ]
-      }
-    }
+    if (this.state.loading) return <Loader title={title} />
+
+    const { date, hour, wday } = this.state.data;
 
     return (
-      <Page title="日時から見るQiita" {...this.props}>
+      <Page title={title} {...this.props}>
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--12-col mdl-typography--text-left mdl-cell--middle mdl-typography--subhead q-text">
             <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%" }}>
               <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
-                <LineChart data={this.chartData("created_at", rec => `${rec["year"]}-${rec["month"]}-${rec["day"]} (${rec["wday"]})`)} options={chartOptions} />
+                <LineChart data={date} options={chartOptions} />
               </div>
               <div className="mdl-card__actions mdl-card--border q-card__actions">
                 日別投　投稿数・平均ストック数
@@ -65,7 +88,7 @@ export default class DatePage extends React.Component {
           <div className="mdl-cell mdl-cell--6-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
             <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%"}}>
               <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
-                <LineChart data={this.chartData("hour", rec => rec["hour"])} options={chartOptions} />
+                <LineChart data={hour} options={chartOptions} />
               </div>
               <div className="mdl-card__actions mdl-card--border q-card__actions">
                 時間帯別　投稿数・平均ストック数
@@ -75,7 +98,7 @@ export default class DatePage extends React.Component {
           <div className="mdl-cell mdl-cell--6-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
             <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%"}}>
               <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
-                <LineChart data={this.chartData("created_at", rec => rec["wday"])} options={chartOptions} />
+                <LineChart data={wday} options={chartOptions} />
               </div>
               <div className="mdl-card__actions mdl-card--border q-card__actions">
                 曜日別　投稿数・平均ストック数

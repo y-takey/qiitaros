@@ -1,9 +1,38 @@
 import _ from 'lodash';
 import React from 'react';
 import Page from './Page';
+import Loader from './Loader';
 import LineChart from './LineChart';
 
+const title = "文字数から見るQiita";
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    yAxes: [
+      { "id": "y-axis-0", position: "left" },
+      { "id": "y-axis-1", position: "right" }
+    ]
+  }
+}
+
 export default class CharPage extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = { loading: true };
+  }
+
+  componentDidMount() {
+    this.setState({
+      loading: false,
+      data: {
+        titleCount: this.chartData("title_char_count", -1),
+        bodyCount: this.chartData("body_char_count", -3),
+      }
+    });
+  }
+
   dataSummary(sortField, precision) {
     return _.reduce(_.sortBy(this.props.data, sortField), (result, rec)=> {
       let key = "" + _.round(rec[sortField], precision) + "字";
@@ -38,24 +67,17 @@ export default class CharPage extends React.Component {
   }
 
   render() {
-    const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        yAxes: [
-          { "id": "y-axis-0", position: "left" },
-          { "id": "y-axis-1", position: "right" }
-        ]
-      }
-    }
+    if (this.state.loading) return <Loader title={title} />
+
+    const { titleCount, bodyCount } = this.state.data;
 
     return (
-      <Page title="文字数から見るQiita" {...this.props}>
+      <Page title={title} {...this.props}>
         <div className="mdl-grid">
           <div className="mdl-cell mdl-cell--6-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
             <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%" }}>
               <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
-                <LineChart data={this.chartData("title_char_count", -1)} options={chartOptions} />
+                <LineChart data={titleCount} options={chartOptions} />
               </div>
               <div className="mdl-card__actions mdl-card--border q-card__actions">
                 タイトル文字数と投稿数・平均ストック数
@@ -65,7 +87,7 @@ export default class CharPage extends React.Component {
           <div className="mdl-cell mdl-cell--6-col mdl-typography--text-left mdl-typography--headline mdl-typography--font-thin q-text">
             <div className="mdl-card mdl-shadow--2dp" style={ {width: "100%"} }>
               <div className="mdl-card__title mdl-card--expand" style={{ padding: "30px", height: "250px" } }>
-                <LineChart data={this.chartData("body_char_count", -3)} options={chartOptions} />
+                <LineChart data={bodyCount} options={chartOptions} />
               </div>
               <div className="mdl-card__actions mdl-card--border q-card__actions">
                 本文文字数と投稿数・平均ストック数
