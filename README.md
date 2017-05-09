@@ -1,34 +1,58 @@
 # qiitaros
 
 
-### To run
+## Data attributes
 
-* You'll need to have [git](https://git-scm.com/) and [node](https://nodejs.org/en/) installed in your system.
+### post_summary
+
+| attribute | type | example |
+|--|--|--|
+| uuid | String | "abcdef12345678901234" |
+| title | String | "ほげほげ" |
+| created_at | Datetime | "2017-05-09 20:47:07 +0900" |
+| stock_count | Number | 10 |
+| comment_count | Number | 20 |
+| user | String | "foo" |
+| tags | Array<String> | ["Java","Ruby"] |
+| title_char_count | Number | 32 |
+| body_char_count | Number | 54 |
+| year | Number | 2017 |
+| month | Number | 5 |
+| day | Number | 9 |
+| wday | String | "Mon" |
+| hour | Number | 20 |
+| minute | Number | 14 |
+
+
+### tag_summary
+
+| attribute | type | example |
+|--|--|--|
+| name | String | "javascript" |
+| post_num | Number | 10 |
+| stock_count | Number | 20 |
+| comment_count | Number | 30 |
+
+## Development
+
+### To run
 
 * install the dependencies:
 
 ```
-npm install
+yarn
 ```
 
-* Run development server:
-
 ```
-npm start
-```
-
-* Or you can run development server with [webpack-dashboard](https://github.com/FormidableLabs/webpack-dashboard):
-
-```
-npm run dev
+yarn run dev
 ```
 
 Open the web browser to `http://localhost:8888/`
 
-### To build the production package
+### To build the production package and deploy to github-pages
 
 ```
-npm run build
+yarn run deploy
 ```
 
 ### Eslint
@@ -44,7 +68,3 @@ To do the actual linting, run:
 ```
 npm run lint
 ```
-
-### Notes on importing css styles
-* styles having /src/ in their absolute path are considered part of the application and exported as local css modules.
-* other styles are considered global styles used by many components and are included in the css bundle directly.
