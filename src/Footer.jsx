@@ -16,7 +16,9 @@ export default class Footer extends React.Component {
         </div>
 
         <div className="mdl-mega-footer--middle-section">
-          <p className="mdl-typography--font-light"></p>
+          <p className="mdl-typography--font-light">
+            <a href="https://github.com/y-takey/qiitaros">VIEW SOURCE</a>
+          </p>
         </div>
 
         <div className="mdl-mega-footer--bottom-section">
