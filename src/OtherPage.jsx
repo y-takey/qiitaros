@@ -11,7 +11,8 @@ const containerStyle = {
   width: "100%",
   overflowX: "scroll",
   padding: "20px",
-  backgroundColor: "#ffffff"
+  backgroundColor: "#ffffff",
+  fontSize: "16px"
 };
 
 export default class OtherPage extends React.Component {
