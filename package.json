@@ -20,7 +20,7 @@
   "dependencies": {
     "chart.js": "^2.9.4",
     "jquery-ui": "^1.13.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "material-design-lite": "^1.3.0",
     "node-sass": "^7.0.0",
     "pivottable": "^2.13.0",
